@@ -42,8 +42,7 @@ RUN apt-get update \
 
 # OpenCV 4.8 only 
 RUN git clone -q --depth 1 --branch 4.8.0 https://github.com/opencv/opencv \
-    && mkdir opencv-build && cd opencv-build && cmake  -DCMAKE_CXX_STANDARD=17 ../opencv && make
-RUN cd opencv-build && make install 
+    && mkdir opencv-build && cd opencv-build && cmake  -DCMAKE_CXX_STANDARD=17 ../opencv && make && make install && rm -rf opencv opencv-build 
 
 
 #-----------------------------
