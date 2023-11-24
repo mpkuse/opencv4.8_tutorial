@@ -15,15 +15,25 @@ OR pull one from docker hub
 docker pull mpkuse/joke-image:with-opencv
 ```
 
-## Run this repo with Docker
+## Run Docker
 ```
 $(host) xhost +local:root 
 
 $(host) docker run -it -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/Downloads/opencv4.8_tutorial:/code joke-image:with-opencv
+```
 
+
+## Compile and Run C++ Code (in docker)
+
+```
 $(docker) cd /code && mkdir build && cd build 
 $(docker) cmake .. && make 
 $(docker) ./example #should display a lena image
 ```
 
 
+## Run Python code 
+```
+$(docker) cd py 
+$(docker) python3 example_1.py
+```

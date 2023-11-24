@@ -44,6 +44,7 @@ RUN apt-get update \
 RUN git clone -q --depth 1 --branch 4.8.0 https://github.com/opencv/opencv \
     && mkdir opencv-build && cd opencv-build && cmake  -DCMAKE_CXX_STANDARD=17 ../opencv && make && make install && rm -rf opencv opencv-build 
 
+ENV PYTHONPATH=/usr/local/lib/python3.10/dist-packages
 
 #-----------------------------
 # How to build docker image  #
