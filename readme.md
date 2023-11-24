@@ -1,6 +1,6 @@
-# Opencv4.5 Example 
+# Opencv4.8 Example 
 
-Trying out the newest opencv with the latest tools 
+Trying out the newest opencv with the latest tools. Idea is to develop a set of examples with the latest opencv. Also make all the needed library environment for computer vision developers (especially SLAM) in one place with a docker. 
 
 ## Docker 
 The supplied docker has opencv4.8 already setup and installed with graphics. 
