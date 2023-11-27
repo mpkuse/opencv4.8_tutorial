@@ -46,6 +46,10 @@ RUN git clone -q --depth 1 --branch 4.8.0 https://github.com/opencv/opencv \
 
 ENV PYTHONPATH=/usr/local/lib/python3.10/dist-packages
 
+#---- Gtests 
+RUN apt-get update \
+    && apt-get install -y libgtest-dev
+
 #-----------------------------
 # How to build docker image  #
 #-----------------------------
