@@ -138,7 +138,6 @@ namespace geom
 
         // note: fundamental_matrix_x is of type 64FC1
 
-
         //-- build inverse transforms
         cv::Mat T1 = (cv::Mat_<double>(3, 3) << 1.0 / m1_stddev.x, 0., -m1_mean.x / m1_stddev.x,
                       0, 1.0 / m1_stddev.y, -m1_mean.y / m1_stddev.y,

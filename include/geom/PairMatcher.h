@@ -60,7 +60,7 @@ namespace geom
         void compute_fundamental_matrix_with_normalization();
         void fundamental_matrix_test();
 
-        static bool constexpr normalize_for_f_matrix_computation = false;
+        static bool constexpr normalize_for_f_matrix_computation = true;
     };
 
 } // namespace geom

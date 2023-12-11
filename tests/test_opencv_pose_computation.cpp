@@ -149,16 +149,16 @@ void ImagePairMatcher(const std::string &im1_fname, const std::string &im2_fname
         helpers::MiscUtils::plot_point_pair(im1, p.M1(), 0, im2, p.M2(), 1, dst, cv::Scalar(0, 0, 255), cv::Scalar(0, 255, 0), false, info_str);
         cv::imshow("dst retained", dst);
         cv::waitKey(0);
-        
     }
 
     Eigen::MatrixXd M1 = p.M1();
     Eigen::MatrixXd M2 = p.M2();
-    std::cout << "M1: " << helpers::MiscUtils::eigen_info( M1 ) << std::endl;
-    std::cout << "M2: " << helpers::MiscUtils::eigen_info( M2 ) << std::endl;
-    Eigen::Matrix3d F; 
-    p.get_fundamental_matrix( F ); 
-    std::cout << "p.get_fundamental_matrix: \n" << F << std::endl;
+    std::cout << "M1: " << helpers::MiscUtils::eigen_info(M1) << std::endl;
+    std::cout << "M2: " << helpers::MiscUtils::eigen_info(M2) << std::endl;
+    Eigen::Matrix3d F;
+    p.get_fundamental_matrix(F);
+    std::cout << "p.get_fundamental_matrix: \n"
+              << F << std::endl;
 
     Eigen::Matrix3d K; // camera intrinsic
     double f = 719.5459;
@@ -166,8 +166,8 @@ void ImagePairMatcher(const std::string &im1_fname, const std::string &im2_fname
         0, f, 0,
         0, 0, 1;
 
-    geom::TwoViewGeometry g( M1, M2, F, K );
-    //see: https://cmsc426.github.io/sfm/
+    geom::TwoViewGeometry g(M1, M2, F, K);
+    // see: https://cmsc426.github.io/sfm/
 }
 
 void PoseComputationFromEssentialMat(const std::string &im1_fname, const std::string &im2_fname)

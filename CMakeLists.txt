@@ -12,6 +12,7 @@ find_package(Eigen3 REQUIRED)
 add_library(helpers SHARED
     src/helpers/MiscUtils.cpp
     src/helpers/TermColors.cpp
+    src/helpers/RawFileIO.cpp
 )
 
 # Build geom library 
