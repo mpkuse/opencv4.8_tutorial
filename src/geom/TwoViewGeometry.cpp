@@ -125,6 +125,12 @@ namespace geom
             helpers::RawFileIO::print_eigen_matrix("R1", R1);
             helpers::RawFileIO::print_eigen_matrix("R2", R2);
             helpers::RawFileIO::print_eigen_matrix("tr", tr);
+   
+            std::cout << "det(R1) = " << R1.determinant() << std::endl;
+            std::cout << "det(R2) = " << R2.determinant() << std::endl;
+            std::cout << "Singular vals of E: " << S << std::endl; 
+
+            std::cout << "UZUt :\n" << U * W.transpose() * U.transpose() << std::endl;
         }
     }
 

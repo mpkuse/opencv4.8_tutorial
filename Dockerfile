@@ -35,14 +35,24 @@ RUN apt-get update \
 RUN apt-get update \
     && apt-get install -y libavcodec-dev libavformat-dev libswscale-dev libavutil-dev libavcodec-extra
 
+#---- viz dependencies: VTK (comment these, if not compiling with contrib)
+ENV DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_PRIORITY=critical
+RUN apt-get update \
+    && apt-get install -y libvtk9-qt-dev 
+
+
 #---- Clone Opencv4.8
-#RUN git clone -q --depth 1 --branch 4.8.0 https://github.com/opencv/opencv \
-#    && git clone -q --depth 1 --branch 4.8.0 https://github.com/opencv/opencv_contrib \
-#    && mkdir opencv-build && cd opencv-build && cmake -DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules ../opencv && make 
+RUN git clone -q --depth 1 --branch 4.8.0 https://github.com/opencv/opencv \
+   && git clone -q --depth 1 --branch 4.8.0 https://github.com/opencv/opencv_contrib \
+   && mkdir opencv-build && cd opencv-build \
+   && cmake  -DCMAKE_CXX_STANDARD=17 -DWITH_VTK=ON -DOPENCV_ENABLE_NONFREE=ON -DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules ../opencv \
+   && make && make install \
+   && cd .. && rm -rf opencv opencv-build opencv_contrib opencv 
 
 # OpenCV 4.8 only 
-RUN git clone -q --depth 1 --branch 4.8.0 https://github.com/opencv/opencv \
-    && mkdir opencv-build && cd opencv-build && cmake  -DCMAKE_CXX_STANDARD=17 ../opencv && make && make install && rm -rf opencv opencv-build 
+#RUN git clone -q --depth 1 --branch 4.8.0 https://github.com/opencv/opencv \
+#    && mkdir opencv-build && cd opencv-build && cmake  -DCMAKE_CXX_STANDARD=17 ../opencv && make && make install && rm -rf opencv opencv-build 
 
 ENV PYTHONPATH=/usr/local/lib/python3.10/dist-packages
 
