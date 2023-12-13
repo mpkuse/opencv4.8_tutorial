@@ -166,8 +166,23 @@ void ImagePairMatcher(const std::string &im1_fname, const std::string &im2_fname
         0, f, 0,
         0, 0, 1;
 
-    geom::TwoViewGeometry g(M1, M2, F, K);
-    // see: https://cmsc426.github.io/sfm/
+    geom::TwoViewGeometry g2view(M1, M2, F, K);
+    const Matrix4d cam1_T_w = g2view.get_cam1_T_w();
+    const Matrix4d cam2_T_w = g2view.get_cam2_T_w();
+    const MatrixXd pts_w = g2view.get_pts_w();
+
+    if constexpr (true)
+    {
+        // write results to file 
+        std::string outfname = "data/pts3d_w.txt"; 
+        helpers::RawFileIO::write_eigen_matrix(outfname, pts_w.transpose());
+
+        outfname = "data/wTc1.txt"; 
+        helpers::RawFileIO::write_eigen_matrix(outfname, cam1_T_w.inverse());
+
+        outfname = "data/wTc2.txt"; 
+        helpers::RawFileIO::write_eigen_matrix(outfname, cam2_T_w.inverse());
+    }
 }
 
 void PoseComputationFromEssentialMat(const std::string &im1_fname, const std::string &im2_fname)

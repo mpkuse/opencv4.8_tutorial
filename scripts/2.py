@@ -9,13 +9,15 @@ from data_utils import load_mat, comb, file_to_str
 
 
 BASE="../build/data"
+BASE="../data/SFMedu/result/selected_solution"
 
-wTc = load_mat( file_to_str( BASE+"/wTc_3.txt" ), '\n', ' ' )
-pts = load_mat( file_to_str( BASE+"/pts3d_3.txt" ), '\n', ' ' )
+wTc1 = load_mat( file_to_str( BASE+"/wTc1.txt" ), '\n', ' ' )
+wTc2 = load_mat( file_to_str( BASE+"/wTc2.txt" ), '\n', ' ' )
+pts = load_mat( file_to_str( BASE+"/pts3d_w.txt" ), '\n', ' ' )
 
-print( pts )
+#print( pts )
 norms = np.linalg.norm(pts, axis=1)
-pts = pts[norms <= 100]
+pts = pts[norms <= 10]
 
 
 
@@ -26,9 +28,9 @@ all_geoms.append(
 
 
 all_geoms += create_camera_visualization_mesh(
-    np.eye(4), color=color_map_normalized['gray'],  scale=0.1)
+    wTc1, color=color_map_normalized['gray'],  scale=0.1)
 all_geoms += create_camera_visualization_mesh(
-    wTc, color=color_map_normalized['green'],  scale=0.1)
+    wTc2, color=color_map_normalized['green'],  scale=0.1)
 
 #pts = np.random.rand(100, 3)
 single_color = [1.0, 0.0, 0.0]
