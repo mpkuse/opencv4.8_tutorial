@@ -183,7 +183,7 @@ namespace geom
             }
         }
 
-        if (op_with_positive_chirality >= 3u)
+        if (op_with_positive_chirality > 3u)
         {
             M_ASSERT(false, "cannnot find a solution for +ve chirality");
         }

@@ -10,9 +10,49 @@
 
 #include <helpers/MiscUtils.h>
 #include <helpers/CustomAssert.h>
+#include <geom/ImagedFeatures.h>
 
 namespace geom
 {
+    class PairMatcher2
+    {
+    public:
+        PairMatcher2(const ImagedFeatures &frame1_, const ImagedFeatures &frame2_);
+        void PrintInfo();
+
+        const Eigen::MatrixXd M1() const;
+        const std::vector<geom::FeatIdx> M1Idx() const;
+
+        const Eigen::MatrixXd M2() const;
+        const std::vector<geom::FeatIdx> M2Idx() const;
+
+        void GetFundamentalMatrix(Eigen::Matrix<double, 3, 3> &F) const;
+        const cv::Mat VizImage() const;
+
+    private:
+        const ImagedFeatures frame1,
+            frame2;
+        void basic_nn_matching();
+        void ratio_test(const float nn_match_ratio);
+
+        void compute_fundamental_matrix();
+        void compute_fundamental_matrix_with_normalization();
+        void fundamental_matrix_test();
+
+        std::vector<std::vector<cv::DMatch>> nn_matches;       //< 2nn matches for every kpts of frame1
+        std::vector<cv::KeyPoint> matched1, matched2;          //< results after ratiotest
+        std::vector<geom::FeatIdx> matched1_idx, matched2_idx; //< idx of matched1 and matched2
+        std::vector<cv::Point2f> m1, m2;
+
+        std::vector<uchar> matched_inliers;
+        std::vector<cv::Point2f> m1_retained, m2_retained;           //< result after f-test
+        Eigen::MatrixXd m1_retained_eigen, m2_retained_eigen;        //< same as `m?_retained`
+        std::vector<geom::FeatIdx> m1_retained_idx, m2_retained_idx; //< idx of matched1 and matched2
+
+        cv::Mat fundamental_matrix;
+        static bool constexpr normalize_for_f_matrix_computation = true;
+    };
+
     // A basic, brute force matcher given two input images
     class PairMatcher
     {

@@ -11,11 +11,6 @@ RUN apt-get update && apt-get install -y libeigen3-dev libspdlog-dev libsuitespa
 RUN apt-get update && apt-get install -y qtdeclarative5-dev qt5-qmake libqglviewer-dev-qt5
 
 
-#---- Clone g2o and Build it 
-# RUN git clone -q --depth 1 --branch 20230806_git https://github.com/RainerKuemmerle/g2o \
-#     && cd g2o \
-#     && mkdir build && cd build && cmake .. && make && make install 
-
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 
@@ -48,7 +43,7 @@ RUN git clone -q --depth 1 --branch 4.8.0 https://github.com/opencv/opencv \
    && mkdir opencv-build && cd opencv-build \
    && cmake  -DCMAKE_CXX_STANDARD=17 -DWITH_VTK=ON -DOPENCV_ENABLE_NONFREE=ON -DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib/modules ../opencv \
    && make && make install \
-   && cd .. && rm -rf opencv opencv-build opencv_contrib opencv 
+   && cd .. && rm -rf opencv opencv-build opencv_contrib 
 
 # OpenCV 4.8 only 
 #RUN git clone -q --depth 1 --branch 4.8.0 https://github.com/opencv/opencv \
@@ -59,6 +54,13 @@ ENV PYTHONPATH=/usr/local/lib/python3.10/dist-packages
 #---- Gtests 
 RUN apt-get update \
     && apt-get install -y libgtest-dev
+
+
+#---- Clone g2o and Build it 
+RUN git clone -q --depth 1 --branch 20230806_git https://github.com/RainerKuemmerle/g2o \
+    && cd g2o \
+    && mkdir build && cd build && cmake .. && make && make install 
+
 
 #-----------------------------
 # How to build docker image  #

@@ -8,8 +8,8 @@ from data_utils import load_mat, comb, file_to_str
 
 
 
-BASE="../build/data"
-BASE="../data/SFMedu/result/selected_solution"
+BASE="../build/data2"
+#BASE="../data/SFMedu/result/selected_solution"
 
 wTc1 = load_mat( file_to_str( BASE+"/wTc1.txt" ), '\n', ' ' )
 wTc2 = load_mat( file_to_str( BASE+"/wTc2.txt" ), '\n', ' ' )

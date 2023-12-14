@@ -12,6 +12,7 @@
 #include <helpers/TermColor.h>
 #include <helpers/ElapsedTime.h>
 
+#include <geom/ImagedFeatures.h>
 #include <geom/PairMatcher.h>
 #include <geom/TwoViewGeometry.h>
 
@@ -173,14 +174,14 @@ void ImagePairMatcher(const std::string &im1_fname, const std::string &im2_fname
 
     if constexpr (true)
     {
-        // write results to file 
-        std::string outfname = "data/pts3d_w.txt"; 
+        // write results to file
+        std::string outfname = "data/pts3d_w.txt";
         helpers::RawFileIO::write_eigen_matrix(outfname, pts_w.transpose());
 
-        outfname = "data/wTc1.txt"; 
+        outfname = "data/wTc1.txt";
         helpers::RawFileIO::write_eigen_matrix(outfname, cam1_T_w.inverse());
 
-        outfname = "data/wTc2.txt"; 
+        outfname = "data/wTc2.txt";
         helpers::RawFileIO::write_eigen_matrix(outfname, cam2_T_w.inverse());
     }
 }
@@ -302,4 +303,55 @@ TEST(OpenCVExamples, PoseComputationFromEssentialMat)
     std::string im2_fname = "../data/SFMedu/B22.jpg";
 
     PoseComputationFromEssentialMat(im1_fname, im2_fname);
+}
+
+TEST(OpenCVExamples, ImagedFeatures)
+{
+    cv::Ptr<cv::Feature2D> feat_detector = cv::SIFT::create();
+    ;
+
+    const auto frame1 = geom::ImagedFeatures("../data/SFMedu/B21.jpg", 0, feat_detector);
+    const auto frame2 = geom::ImagedFeatures("../data/SFMedu/B22.jpg", 1, feat_detector);
+    frame1.PrintInfo();
+    frame2.PrintInfo();
+
+    auto pair_matcher = geom::PairMatcher2(frame1, frame2);
+    pair_matcher.PrintInfo();
+    cv::imshow("pair", pair_matcher.VizImage());
+
+    // 2view geometry
+    if (true)
+    {
+        const auto M1 = pair_matcher.M1();
+        const auto M2 = pair_matcher.M2();
+
+        Eigen::Matrix3d K; // camera intrinsic
+        double f = 719.5459;
+        K << f, 0, 0,
+            0, f, 0,
+            0, 0, 1;
+        Eigen::Matrix3d F;
+        pair_matcher.GetFundamentalMatrix(F);
+
+        geom::TwoViewGeometry g2view(M1, M2, F, K);
+        const Matrix4d cam1_T_w = g2view.get_cam1_T_w();
+        const Matrix4d cam2_T_w = g2view.get_cam2_T_w();
+        const MatrixXd pts_w = g2view.get_pts_w();
+
+        if constexpr (true)
+        {
+            // write results to file
+            std::string outfname = "data2/pts3d_w.txt";
+            helpers::RawFileIO::write_eigen_matrix(outfname, pts_w.transpose());
+
+            outfname = "data2/wTc1.txt";
+            helpers::RawFileIO::write_eigen_matrix(outfname, cam1_T_w.inverse());
+
+            outfname = "data2/wTc2.txt";
+            helpers::RawFileIO::write_eigen_matrix(outfname, cam2_T_w.inverse());
+        }
+    }
+
+    // cv::imshow( "win1", frame1.Image() );
+    cv::waitKey(0);
 }

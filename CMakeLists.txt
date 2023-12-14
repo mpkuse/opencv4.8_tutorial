@@ -17,6 +17,7 @@ add_library(helpers SHARED
 
 # Build geom library 
 add_library(geom SHARED
+    src/geom/ImagedFeatures.cpp
     src/geom/PairMatcher.cpp
     src/geom/TwoViewGeometry.cpp
 )

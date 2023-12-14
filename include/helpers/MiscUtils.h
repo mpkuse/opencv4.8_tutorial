@@ -61,6 +61,15 @@ namespace helpers
         static void retain_inliers(const std::vector<cv::Point2f> &kp, const std::vector<uchar> &inliers, std::vector<cv::Point2f> &kp_retained);
         static void retain_non_inliers(const std::vector<cv::Point2f> &kp, const std::vector<uchar> &inliers, std::vector<cv::Point2f> &kp_retained);
 
+        template <typename T>
+        static void retain_inliers_g(const std::vector<T> &kp, const std::vector<uchar> &inliers, std::vector<T> &kp_retained);
+
+        template <typename T>
+        static void retain_when_true(const std::vector<T> &kp, const std::vector<bool> &mask, std::vector<T> &kp_retained);
+
+        template <typename T>
+        static void retain_when_false(const std::vector<T> &kp, const std::vector<bool> &mask, std::vector<T> &kp_retained);
+
         //--------------------- Plot Keypoints on Image ----------------------------//
         // Eigen Interace:  PLotting functions with Eigen Interfaces
         static void plot_point_sets(const cv::Mat &im, const MatrixXd &pts_set, cv::Mat &dst,
@@ -148,4 +157,47 @@ namespace helpers
         buffer << "shape=" << m.rows() << "x" << m.cols();
         return buffer.str();
     }
+
+    template <typename T>
+    void MiscUtils::retain_inliers_g(const std::vector<T> &kp, const std::vector<uchar> &inliers, std::vector<T> &kp_retained)
+    {
+        kp_retained.clear();
+        assert(kp.size() == inliers.size() && "Expecting number of items to be equal to inliers mask");
+        for (auto i = 0u; i < kp.size(); i++)
+        {
+            if (inliers[i] > 0u)
+            {
+                kp_retained.push_back(kp[i]);
+            }
+        }
+    }
+
+    template <typename T>
+    static void retain_when_true(const std::vector<T> &kp, const std::vector<bool> &mask, std::vector<T> &kp_retained)
+    {
+        kp_retained.clear();
+        assert(kp.size() == mask.size() && "Expecting number of items to be equal to mask");
+        for (auto i = 0u; i < kp.size(); i++)
+        {
+            if (mask[i])
+            {
+                kp_retained.push_back(kp[i]);
+            }
+        }
+    }
+
+    template <typename T>
+    static void retain_when_false(const std::vector<T> &kp, const std::vector<bool> &mask, std::vector<T> &kp_retained)
+    {
+        kp_retained.clear();
+        assert(kp.size() == mask.size() && "Expecting number of items to be equal to mask");
+        for (auto i = 0u; i < kp.size(); i++)
+        {
+            if (!mask[i])
+            {
+                kp_retained.push_back(kp[i]);
+            }
+        }
+    }
+
 }
