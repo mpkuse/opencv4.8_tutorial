@@ -23,11 +23,13 @@ namespace geom
         return n;
     }
 
-    bool TwoViewGeometry::chirality_check(const Matrix4d &cam_T_w, const Vector4d &X_w)
+    bool TwoViewGeometry::chirality_check(const Matrix4d &w_T_cam, const Vector4d &X_w)
     {
         double d = 0.;
+        const auto C_w = w_T_cam.col(3);
+
         for (uint32_t i = 0; i < 3; i++)
-            d += cam_T_w(2, i) * (X_w(i) - cam_T_w(i, 3));
+            d += w_T_cam(2, i) * (X_w(i) - C_w(i));
 
         return d > 0.;
     }
@@ -38,7 +40,7 @@ namespace geom
         for (uint32_t i = 0; i < pts3d.cols(); i++)
         {
             Vector4d X_w = pts3d.col(i);
-            n = chirality_check(cam_T_w, X_w) ? n + 1 : n;
+            n = chirality_check(cam_T_w.inverse(), X_w) ? n + 1 : n;
         }
         return n;
     }
@@ -172,7 +174,11 @@ namespace geom
             uint32_t n_chirality_cam2 = count_positive_chirality(Ti[op], pts3d[op]);
 
             float cam1_poschirality_ratio = n_chirality_cam1 / float(n_pts);
-            float cam2_pos_chirality_ratio = n_chirality_cam1 / float(n_pts);
+            float cam2_pos_chirality_ratio = n_chirality_cam2 / float(n_pts);
+            if constexpr (verbose)
+            {
+                printf("[op=%u] pts,n_chirality_cam1,n_chirality_cam2: %u,%u,%u\n", op, n_pts, n_chirality_cam1, n_chirality_cam2);
+            }
             if (cam1_poschirality_ratio > 0.8 && cam2_pos_chirality_ratio > 0.8)
             {
                 if constexpr (verbose)
@@ -192,6 +198,25 @@ namespace geom
         cam1_T_w = eye;
         cam2_T_w = Ti[op_with_positive_chirality];
         pts_w = pts3d[op_with_positive_chirality];
+
+        // write out all the 4 solution for debugging
+        if constexpr (verbose)
+        {
+            printf("op_with_positive_chirality=%u\n", op_with_positive_chirality);
+            // write results to file
+            for (uint32_t op = 0; op < 4; op++)
+            {
+                std::string base = "data2/sol" + to_string(op) + "_";
+                std::string outfname = base + "pts3d_w.txt";
+                helpers::RawFileIO::write_eigen_matrix(outfname, pts3d[op].transpose());
+
+                outfname = base + "wTc1.txt";
+                helpers::RawFileIO::write_eigen_matrix(outfname, eye.inverse());
+
+                outfname = base + "wTc2.txt";
+                helpers::RawFileIO::write_eigen_matrix(outfname, Ti[op].inverse());
+            }
+        }
     }
 
     Eigen::Matrix4d TwoViewGeometry::to_transform(const Eigen::Matrix3d &R, const Eigen::Vector3d &t)

@@ -1,6 +1,8 @@
 import open3d as o3d
 import numpy as np
 
+from common_colors import color_map_normalized
+
 def create_camera_visualization_mesh(wTc, color=[1, 0, 0], scale=1.0):
     # Camera frustum vertices in camera coordinate system
     frustum_vertices = np.array([
@@ -53,3 +55,16 @@ def create_camera_visualization_mesh(wTc, color=[1, 0, 0], scale=1.0):
 
     return [mesh, line_set]
 
+
+def add_pose(wTc, all_geoms, color_str='red'):
+    all_geoms += create_camera_visualization_mesh(
+        wTc, color=color_map_normalized[color_str],  scale=0.1)
+
+
+def add_pts(pts, all_geoms, color_str='red'):
+    single_color = color_map_normalized[color_str]
+    point_cloud = o3d.geometry.PointCloud()
+    point_cloud.points = o3d.utility.Vector3dVector(pts[:, 0:3])
+    point_cloud.colors = o3d.utility.Vector3dVector(
+        np.tile(single_color, (pts.shape[0], 1)))
+    all_geoms.append(point_cloud)

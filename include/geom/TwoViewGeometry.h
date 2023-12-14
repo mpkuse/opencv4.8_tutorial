@@ -70,7 +70,7 @@ namespace geom
 
         uint32_t count_positive_z(const MatrixXd &pts3d);
         bool chirality_check(const Matrix4d &cam_T_w, const Vector4d &X_w);
-        uint32_t count_positive_chirality(const Matrix4d &cam_T_w, const MatrixXd &pts3d);
+        uint32_t count_positive_chirality(const Matrix4d &w_T_cam, const MatrixXd &pts3d);
 
         // given R_3x3 and t_3x1, set it into T:=[ R t; 0 1 ]
         Eigen::Matrix4d to_transform(const Eigen::Matrix3d &R, const Eigen::Vector3d &t);

@@ -310,8 +310,8 @@ TEST(OpenCVExamples, ImagedFeatures)
     cv::Ptr<cv::Feature2D> feat_detector = cv::SIFT::create();
     ;
 
-    const auto frame1 = geom::ImagedFeatures("../data/SFMedu/B21.jpg", 0, feat_detector);
-    const auto frame2 = geom::ImagedFeatures("../data/SFMedu/B22.jpg", 1, feat_detector);
+    const auto frame1 = geom::ImagedFeatures("../data/SFMedu/B22.jpg", 0, feat_detector);
+    const auto frame2 = geom::ImagedFeatures("../data/SFMedu/B23.jpg", 1, feat_detector);
     frame1.PrintInfo();
     frame2.PrintInfo();
 
