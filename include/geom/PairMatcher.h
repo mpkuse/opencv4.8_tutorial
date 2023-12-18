@@ -18,7 +18,7 @@ namespace geom
     {
     public:
         PairMatcher2(const ImagedFeatures &frame1_, const ImagedFeatures &frame2_);
-        void PrintInfo();
+        void PrintInfo(const uint8_t verbosity = 0u) const;
 
         const Eigen::MatrixXd M1() const;
         const std::vector<geom::FeatIdx> M1Idx() const;
@@ -59,7 +59,7 @@ namespace geom
     public:
         PairMatcher(const cv::Mat &im1_, const cv::Mat &im2_);
 
-        void PrintInfo();
+        void PrintInfo(const uint8_t verbosity = 0u) const;
 
         Eigen::MatrixXd M1()
         {

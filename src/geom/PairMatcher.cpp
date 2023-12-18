@@ -9,11 +9,27 @@ namespace geom
         fundamental_matrix_test();
     }
 
-    void PairMatcher2::PrintInfo()
+    void PairMatcher2::PrintInfo(const uint8_t verbosity) const
     {
-        printf("Input Features: %u|%u ; ", frame1.DetectedFeaturesCount(), frame2.DetectedFeaturesCount());
-        printf("After Ratio Test: %lu ; ", matched1.size());
-        printf("After F-Test: %lu ; ", m1_retained.size());
+        printf("Seq#%u<>Seq#%u ; ", frame1.Seq(), frame2.Seq());
+        if (verbosity == 0)
+        {
+            printf("Features: %u|%u ; ", frame1.DetectedFeaturesCount(), frame2.DetectedFeaturesCount());
+        }
+        else
+        {
+            printf("Input Features: %u|%u ; ", frame1.DetectedFeaturesCount(), frame2.DetectedFeaturesCount());
+        }
+
+        if (verbosity == 0)
+        {
+            printf("Inlier Matches: %lu ; ", m1_retained.size());
+        }
+        else
+        {
+            printf("After Ratio Test: %lu ; ", matched1.size());
+            printf("After F-Test: %lu ; ", m1_retained.size());
+        }
         printf("\n");
     }
 
@@ -204,7 +220,7 @@ namespace geom
         fundamental_matrix_test();
     }
 
-    void PairMatcher::PrintInfo()
+    void PairMatcher::PrintInfo(const uint8_t verbosity) const
     {
         printf("Input Images:> ");
         printf("\t im1:%s | im2:%s\n", helpers::MiscUtils::cvmat_info(im1).c_str(), helpers::MiscUtils::cvmat_info(im2).c_str());

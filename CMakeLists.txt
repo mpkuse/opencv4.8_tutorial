@@ -6,7 +6,7 @@ find_package(OpenCV REQUIRED)
 find_package(GTest REQUIRED)
 find_package(Eigen3 REQUIRED)
 
-
+#add_compile_options(-Wall)
 
 # Build helpers library 
 add_library(helpers SHARED
@@ -41,6 +41,7 @@ set(TEST_SOURCES
     tests/test_opencv_examples.cpp
     tests/test_opencv_contrib.cpp 
     tests/test_opencv_pose_computation.cpp
+    tests/test_3d_reconstruction.cpp
 )
 #file(GLOB TEST_SOURCES "tests/*.cpp")
 

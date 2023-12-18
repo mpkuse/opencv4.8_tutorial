@@ -31,11 +31,17 @@ namespace geom
         return kpts.size();
     }
 
-    void ImagedFeatures::PrintInfo() const
+    void ImagedFeatures::PrintInfo(const uint8_t verbosity) const
     {
-        printf("Image: %s ; ", im_fname.c_str());
-        printf("%s ; ", helpers::MiscUtils::cvmat_info(im).c_str());
-        printf("n_feats: %u ; desc_size: %u %u", DetectedFeaturesCount(), desc.rows, desc.cols);
+
+        printf("Seq#%u ; ", Seq());
+        printf("im.%s ; ", helpers::MiscUtils::cvmat_info(im).c_str());
+
+        if (verbosity > 0)
+        {
+            printf("n_feats: %u ; desc_size: %u %u", DetectedFeaturesCount(), desc.rows, desc.cols);
+            printf("fname: %s ; ", im_fname.c_str());
+        }
         printf("\n");
     }
 }
